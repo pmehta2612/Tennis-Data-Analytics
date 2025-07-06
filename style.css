@@ -1,0 +1,22 @@
+body {
+    background-color: #F4F6F9;
+}
+.stMetric {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+}
+.block-container {
+    padding: 1rem 2rem;
+}
+.metric-title {
+    color: #1f77b4;
+    font-weight: bold;
+}
+.header-title {
+    font-size: 30px;
+    font-weight: 800;
+    color: #2E3A59;
+}
