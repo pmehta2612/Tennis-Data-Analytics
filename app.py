@@ -5,9 +5,6 @@ import pandas as pd
 import sqlite3
 import altair as alt
 
-# Connect to SQLite database
-conn = sqlite3.connect("tennis_db.sqlite")
-
 # Set Page Configuration
 st.set_page_config(page_title="Tennis Analytics", page_icon = ":tennis:", layout="wide")
 
@@ -17,6 +14,9 @@ with open("style.css") as f:
 
 # Add title
 st.title(":tennis: Tennis Data Analytics Dashboard")
+
+# Connect to SQLite database
+conn = sqlite3.connect("tennis_db.sqlite")
 
 # Load Data 
 competitors_df = pd.read_sql("SELECT * FROM competitors", conn)
@@ -35,15 +35,6 @@ name_filter = st.sidebar.selectbox("Select Competitor", ["All"] + sorted(merged_
 rank_range = st.sidebar.slider("Rank Range", int(merged_df["rank"].min()), int(merged_df["rank"].max()), (1, 100))
 country_filter = st.sidebar.selectbox("Select Country", ["All"] + sorted(merged_df["country"].dropna().unique()))
 points_threshold = st.sidebar.slider("Minimum Points", 0, int(merged_df["points"].max()), 0)
-
-#category_options = categories_df["category_name"].unique().tolist()
-#category_filter = st.sidebar.multiselect("Competition Category", category_options)
-
-#type_options = competitions_df["type"].dropna().unique().tolist()
-#type_filter = st.sidebar.multiselect("Competition Type", type_options)
-
-#gender_options = competitions_df["gender"].dropna().unique().tolist()
-#gender_filter = st.sidebar.multiselect("Gender", gender_options)
 
 # KPI Cards
 total_competitors = len(competitors_df)
@@ -113,17 +104,7 @@ if name_filter != "All":
 if country_filter != "All":
     filtered_df = filtered_df[filtered_df["country"] == country_filter]
 
-#if type_filter:
-    #comp_ids = competitions_df[competitions_df['type'].isin(type_filter)]['competition_id'].unique()
-#if gender_filter:
-    #gender_comp_ids = competitions_df[competitions_df['gender'].isin(gender_filter)]['competition_id'].unique()
-#if category_filter:
-    #cat_ids = categories_df[categories_df["category_name"].isin(category_filter)]["category_id"].tolist()
-    #comp_ids = competitions_df[competitions_df["category_id"].isin(cat_ids)]["competition_id"].tolist()
-    #filtered_df = filtered_df[filtered_df["competitor_id"].isin(
-        #rankings_df[rankings_df["competitor_id"].isin(filtered_df["competitor_id"])].competitor_id.tolist()
-    #)]
-
+# Apply rank and points filters
 filtered_df = filtered_df[
     (filtered_df["rank"] >= rank_range[0]) & 
     (filtered_df["rank"] <= rank_range[1]) & 
@@ -132,4 +113,5 @@ filtered_df = filtered_df[
 
 st.dataframe(filtered_df[["name", "rank", "movement", "points", "country"]])
 
+# Close connection
 conn.close()
