@@ -32,5 +32,6 @@ for table in tables:
     df.to_sql(table, sqlite_conn, if_exists='replace', index=False)
     print(f"{table} exported to SQLite.")
 
+# Close connection
 mysql_conn.close()
 sqlite_conn.close()
