@@ -1,21 +1,33 @@
 -- Double Competitor Ranking API
 -- Competitor Ranking and Competitions SQL Queries
 -- 1. Get all competitors with their rank and points.
-select c.name as Competitor_Name, cr.rank as `Rank`, cr.points as Points
-from competitor_rankings cr
-join competitors c
-on cr.competitor_id = c.competitor_id;
-
--- 2. Find competitors ranked in the top 5 
-select c.name as Competitor_Name, cr.rank as `Rank`, cr.points as Points
+with cte as (
+select c.name as Competitor_Name, cr.points as Points,
+dense_rank() over (order by points desc) as `Rank`
 from competitor_rankings cr
 join competitors c
 on cr.competitor_id = c.competitor_id
-where cr.rank <= 5
-order by cr.rank;
+)
+select Competitor_Name, Points, `Rank` 
+from cte
+order by Points desc, `Rank` desc;
+
+-- 2. Find competitors ranked in the top 5 
+with cte as (
+select c.name as Competitor_Name, cr.points as Points,
+dense_rank() over (order by points desc) as `Rank`
+from competitor_rankings cr
+join competitors c
+on cr.competitor_id = c.competitor_id
+)
+select Competitor_Name, Points, `Rank` 
+from cte
+where `Rank` <= 5
+order by Points desc, `Rank` desc;
 
 -- 3. List competitors with no rank movement (stable rank) 
-select c.name as Competitor_Name, cr.rank as `Rank`, cr.movement as Movement
+select c.name as Competitor_Name, cr.movement as Movement,
+row_number() over(order by c.name) as Row_Num
 from competitor_rankings cr
 join competitors c
 on cr.competitor_id = c.competitor_id
@@ -31,7 +43,9 @@ where c.country = 'Croatia';
 -- 5. Count the number of competitors per country 
 select country as Country, count(*) as Competitor_Count
 from competitors 
-group by country;
+where country != "Neutral"
+group by country
+order by Competitor_Count desc;
 
 -- 6. Find competitors with the highest points in the current week
 select c.name as Competitor_Name, cr.points as Points
