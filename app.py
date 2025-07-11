@@ -19,7 +19,7 @@ st.title(":tennis: Tennis Data Analytics Dashboard")
 conn = sqlite3.connect("tennis_db.sqlite")
 
 # Load Data 
-competitors_df = pd.read_sql("SELECT * FROM competitors", conn)
+competitors_df = pd.read_sql("SELECT * FROM competitors where country != 'Neutral'", conn)
 rankings_df = pd.read_sql("SELECT * FROM competitor_rankings", conn)
 competitions_df = pd.read_sql("SELECT * FROM competitions", conn)
 categories_df = pd.read_sql("SELECT * FROM categories", conn)
