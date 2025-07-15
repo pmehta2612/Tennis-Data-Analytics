@@ -1,20 +1,19 @@
-body {
-    background-color: #F4F6F9;
-}
-.stMetric {
-    background-color: #f9f9f9;
+/* Formatting metric cards */
+[data-testid = metric-container]{
+    box-shadow: 1px 1px 5px #535050;
     padding: 10px;
-    border-radius: 10px;
-    box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
-    margin-bottom: 10px;
 }
-.block-container {
-    padding: 1rem 2rem;
+.plot_container>div{
+    box-shadow: 1px 1px 5px #313030;
+    padding: 10px
 }
-.metric-title {
-    color: #1f77b4;
+
+/* Make all text in sidebar filter to bold */
+.stSlider > div > label {
     font-weight: bold;
 }
+
+/* Formatting header */
 .header-title {
     font-size: 30px;
     font-weight: 800;
