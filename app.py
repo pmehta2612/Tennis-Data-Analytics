@@ -46,6 +46,13 @@ col1.metric("Total Competitors", total_competitors, border = True)
 col2.metric("Countries Represented", total_countries, border = True)
 col3.metric("Highest Points", highest_points, border = True)
 
+# Styling metric cards
+from streamlit_extras.metric_cards import style_metric_cards
+style_metric_cards(
+    background_color = "#1f66bd",
+    border_left_color= "#071021"
+)
+
 # Competitor Details Viewer
 st.subheader("👤 Competitor Details")
 
@@ -67,12 +74,22 @@ country_analysis = merged_df.groupby("country").agg(
 
 st.dataframe(country_analysis)
 
+# Create a bar chart for country-wise analysis
 chart = alt.Chart(country_analysis.head(10)).mark_bar().encode(
     x=alt.X('country:N', title="Country"),
     y=alt.Y('num_competitors:Q', title="Number of Competitors"),
     tooltip=['country', 'num_competitors', 'avg_points']
 ).properties(title="Top 10 Countries by Number of Competitors")
 
+# Formatting labels in altair chart
+chart = chart.configure_axis(
+    labelColor='#000000',  # Change x-axis label color
+    titleColor='#000000'   # Change y-axis title color
+).configure_title(
+    color='#000000'  # Change chart title color
+)
+
+# View chart
 st.altair_chart(chart, use_container_width=True)
 
 #  Leaderboards 
